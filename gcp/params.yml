@@ -1,42 +1,28 @@
-# pipeline configuration
-iaas: vsphere
+# basics
+service-name:
+director-name:  ((service-name))-director
 
-# vCenter configuration
-vcenter-host:             ((vcenter-host))          # vCenter host or IP
-vcenter-datacenter:       ((vcenter-datacenter))    # vCenter datacenter
-vcenter-cluster:          ((vcenter-cluster))
-
-# state management in github
-state-repository:         ((git-server)):((git-user))/((state-repo))
-git-user:                 ((git-user))
-git-email:                ((git-email))
-
-# Kubo basics
-environment-id:           ((env-id))                # environment identifier for this Kubo installation
-kubo-director-name:       ((env-id))-kubo-director
+# git
+git-server:
+git-user:
+git-email:
 
 # versions
 stemcell-version:         "3445.11"
 odb-sdk-version:          "0.16.1"
 
-# vCenter Cluster or Resource Pool to use to deploy Kubo.
-# Possible formats:
-#   cluster:       /<Data Center Name>/host/<Cluster Name>
-#   resource pool: /<Data Center Name>/host/<Cluster Name>/Resources/<Resource Pool Name>
-kubo-resource-pool: ((vcenter-resource-pool))
+# pipeline configuration
+iaas: gcp
 
-# Datastore to use for K8s machines and persistenet volumes
-kubo-ephemeral-store:   ((slow-storage))
-kubo-persistent-store:  ((slow-storage))
+# GCP configuration
 
-# folders/paths for vCenter
-kubo-vm-folder: ((env-id))-kubo-vms
-kubo-template-folder: ((env-id))-kubo-templates
-kubo-disk-path: ((env-id))-kubo-disks
+
+# state management in github
+state-repository:         ((git-server)):((git-user))/((service-name))-state
 
 # network configuration
 director-ip:            ((director-ip))              # IP address for the BOSH director
-vsphere-network:        ((container-network))        # vCenter Infrastructure network name
+container-network:        ((container-network))        # vCenter Infrastructure network name
 network-cidr:           ((container-cidr))           # Infrastructure network CIDR, ex: 10.0.0.0/22
 excluded-range:         ((container-excluded))       # Infrastructure network exclusion range
 network-dns:            ((dns-server-1))             # Infrastructure network DNS

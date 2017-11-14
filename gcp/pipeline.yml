@@ -7,9 +7,9 @@ jobs:
     trigger: true
   - get: environment-state
   - task: config-director
-    file: homelab/pipelines/install-kubo/tasks/config-director/task.yml
+    file: install-kubo/tasks/((iaas))/config-director/task.yml
     params:
-      KUBO_SERVICE_NAME: k8s-container-runtime
+      KUBO_SERVICE_NAME: ((service-name))
       IAAS: ((iaas))
       VCENTER_HOST: ((vcenter-host))
       VCENTER_USER: ((kubo-vcenter-account.username))
@@ -18,12 +18,12 @@ jobs:
       VCENTER_CLUSTER: ((vcenter-cluster))
       VCENTER_RESOURCE_POOL: ((kubo-resource-pool))
       DIRECTOR_IP: ((director-ip))
-      KUBO_DIRECTOR_NAME: ((kubo-director-name))
+      KUBO_DIRECTOR_NAME: ((director-name))
       KUBO_VM_FOLDER: ((kubo-vm-folder))
       KUBO_TEMPLATES: ((kubo-template-folder))
       KUBO_DISK_PATH: ((kubo-disk-path))
       KUBO_EPHEMERAL_STORE: ((kubo-ephemeral-store))
-      VSPHERE_NETWORK: ((vsphere-network))
+      VSPHERE_NETWORK: ((container-network))
       NETWORK_CIDR: ((network-cidr))
       EXCLUDED_RANGE: ((excluded-range))
       GATEWAY: ((network-gateway))
@@ -31,7 +31,7 @@ jobs:
       GIT_USER: ((git-user))
       GIT_EMAIL: ((git-email))
   - task: config-router
-    file: homelab/pipelines/install-kubo/tasks/config-router/task.yml
+    file: install-kubo/tasks/config-router/task.yml
     params:
       ROUTING_MODE: ((routing-mode))
       KUBERNETES_MASTER_HOST: ((k8s-master-host))
@@ -64,7 +64,7 @@ jobs:
     - configure-director
     trigger: true
   - task: deploy-director
-    file: homelab/pipelines/install-kubo/tasks/deploy-director/task.yml
+    file: install-kubo/tasks/deploy-director/task.yml
     params:
       GIT_USER: ((git-user))
       GIT_EMAIL: ((git-email))
@@ -89,18 +89,18 @@ jobs:
   - get: kubo-release
   - get: stemcell
   - task: config-odb
-    file: homelab/pipelines/install-kubo/tasks/config-odb/task.yml
+    file: install-kubo/tasks/config-odb/task.yml
     params:
-      KUBO_SERVICE_NAME: k8s-container-runtime
+      KUBO_SERVICE_NAME: ((service-name))
       PCF_SYSTEM_DOMAIN: ((pcf-system-domain))
       PCF_USERNAME: ((kubo-pcf-account.username))
       PCF_PASSWORD: ((kubo-pcf-account.password))
   - task: prepare-odb
-    file: homelab/pipelines/install-kubo/tasks/prepare-odb/task.yml
+    file: install-kubo/tasks/prepare-odb/task.yml
   - task: deploy-odb
-    file: homelab/pipelines/install-kubo/tasks/deploy-odb/task.yml
+    file: install-kubo/tasks/deploy-odb/task.yml
     params:
-      KUBO_SERVICE_NAME: k8s-container-runtime
+      KUBO_SERVICE_NAME: ((service-name))
 
 - name: wipe-env
   plan:
@@ -112,13 +112,13 @@ jobs:
     passed:
     - deploy-director
   - task: undeploy-odb
-    file: homelab/pipelines/install-kubo/tasks/undeploy-odb/task.yml
+    file: install-kubo/tasks/undeploy-odb/task.yml
     params:
-      KUBO_SERVICE_NAME: k8s-container-runtime
+      KUBO_SERVICE_NAME: ((service-name))
   - task: undeploy-director
-    file: homelab/pipelines/install-kubo/tasks/undeploy-director/task.yml
+    file: install-kubo/tasks/undeploy-director/task.yml
     params:
-      KUBO_SERVICE_NAME: k8s-container-runtime
+      KUBO_SERVICE_NAME: ((service-name))
   - put: environment-state
     params:
       repository: cleared-state

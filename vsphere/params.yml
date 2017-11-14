@@ -1,23 +1,26 @@
-# pipeline configuration
-iaas: vsphere
+# basics
+service-name:
+director-name:  ((service-name))-director
+subdomain:
+apps-prefix:
+system-prefix:
 
-# vCenter configuration
-vcenter-host:             ((vcenter-host))          # vCenter host or IP
-vcenter-datacenter:       ((vcenter-datacenter))    # vCenter datacenter
-vcenter-cluster:          ((vcenter-cluster))
-
-# state management in github
-state-repository:         ((git-server)):((git-user))/((state-repo))
-git-user:                 ((git-user))
-git-email:                ((git-email))
-
-# Kubo basics
-environment-id:           ((env-id))                # environment identifier for this Kubo installation
-kubo-director-name:       ((env-id))-kubo-director
+# git
+git-server:
+git-user:
+git-email:
 
 # versions
 stemcell-version:         "3445.11"
 odb-sdk-version:          "0.16.1"
+
+# pipeline configuration
+iaas: vsphere
+
+# vSphere configuration
+vcenter-host:             ((vcenter-host))          # vCenter host or IP
+vcenter-datacenter:       ((vcenter-datacenter))    # vCenter datacenter
+vcenter-cluster:          ((vcenter-cluster))
 
 # vCenter Cluster or Resource Pool to use to deploy Kubo.
 # Possible formats:
@@ -30,17 +33,20 @@ kubo-ephemeral-store:   ((slow-storage))
 kubo-persistent-store:  ((slow-storage))
 
 # folders/paths for vCenter
-kubo-vm-folder: ((env-id))-kubo-vms
-kubo-template-folder: ((env-id))-kubo-templates
-kubo-disk-path: ((env-id))-kubo-disks
+kubo-vm-folder: ((service-name))-vms
+kubo-template-folder: ((service-name))-templates
+kubo-disk-path: ((service-name))-disks
+
+# state management in github
+state-repository:         ((git-server)):((git-user))/((service-name))-state
 
 # network configuration
-director-ip:            ((director-ip))              # IP address for the BOSH director
-vsphere-network:        ((container-network))        # vCenter Infrastructure network name
-network-cidr:           ((container-cidr))           # Infrastructure network CIDR, ex: 10.0.0.0/22
-excluded-range:         ((container-excluded))       # Infrastructure network exclusion range
-network-dns:            ((dns-server-1))             # Infrastructure network DNS
-network-gateway:        ((container-gateway))        # Infrastructure network Gateway
+director-ip:                    # IP address for the BOSH director
+container-network:              # Infrastructure network name
+network-cidr:                   # Infrastructure network CIDR, ex: 10.0.0.0/22
+excluded-range:                 # Infrastructure network exclusion range
+network-dns:                    # Infrastructure network DNS
+network-gateway:                # Infrastructure network Gateway
 
 # routing configuration
 routing-mode: cf
