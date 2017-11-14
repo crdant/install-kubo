@@ -125,10 +125,10 @@ jobs:
 
 
 resources:
-  - name: homelab
+  - name: install-kubo
     type: git
     source:
-      uri: https://github.com/crdant/homelab.git
+      uri: https://github.com/crdant/install-kubo.git
       branch: master
   - name: kubo-odb-deployment
     type: git
